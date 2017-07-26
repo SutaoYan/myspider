@@ -67,10 +67,6 @@ public class Movie_dydytt extends Crawl<Movie_dydytt.Item> {
     super(comparator);
   }
 
-  public Movie_dydytt(int maxPage) {
-    super(comparator, maxPage);
-  }
-
   public ArrayList<Item> getMovieList(int page)
   {
     Document doc = null;
@@ -153,7 +149,7 @@ public class Movie_dydytt extends Crawl<Movie_dydytt.Item> {
   }
 
   @Override
-  public void toHtml(ArrayList<Item> total, BufferedWriter bw) throws IOException {
+  public void toHtml(ArrayList<Item> total, OutputStreamWriter bw) throws IOException {
       for(Item item: total) {
         bw.write("      <tr>\n");
         bw.write("        <td><a href="+item.getDownload()+">"+item.getText()+"</a></td>\n");

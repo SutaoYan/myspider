@@ -5,8 +5,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -144,18 +144,14 @@ public class Jobs extends Crawl<Jobs.Item>{
 
   }
 
-  public Jobs(String keyword, int maxPage) {
-    super(comparator, maxPage);
+  public Jobs(String keyword) {
+    super(comparator);
     try {
       this.keyword = URLEncoder.encode(URLEncoder.encode(keyword, "UTF-8"), "UTF-8");
     } catch (UnsupportedEncodingException e) {
       e.printStackTrace();
     }
     search = search.replaceAll("_keyword_", this.keyword);
-  }
-
-  public Jobs() {
-    this("", 50);
   }
 
   private ArrayList<Item> getJobList(int page) {
@@ -190,7 +186,7 @@ public class Jobs extends Crawl<Jobs.Item>{
   }
 
   @Override
-  public void toHtml(ArrayList<Item> total, BufferedWriter bw) throws IOException {
+  public void toHtml(ArrayList<Item> total, OutputStreamWriter bw) throws IOException {
       for(Item item: total) {
         bw.write("      <tr>\n");
         bw.write("        <td><a href="+item.getHref()+">"+item.getTitle()+"</a></td>\n");

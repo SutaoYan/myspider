@@ -1,9 +1,6 @@
 package com.sutao.myspider;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -27,8 +24,17 @@ public abstract class Crawl<E> {
   public void setThreadCount(int threadCount) {
     this.threadCount = threadCount;
   }
+
+  public int getMaxPage() {
+    return maxPage;
+  }
+
+  public void setMaxPage(int maxPage) {
+    this.maxPage = maxPage;
+  }
+
   public abstract ArrayList<E> run (int page);
-  public abstract void toHtml(ArrayList<E> total, BufferedWriter bw ) throws IOException;
+  public abstract void toHtml(ArrayList<E> total, OutputStreamWriter ow ) throws IOException;
 
   public Crawl(Comparator<E> comparator, int maxPage) {
     this.comparator = comparator;
@@ -62,9 +68,8 @@ public abstract class Crawl<E> {
     if (f.exists()) {
       f.delete();
     }
-    try (FileWriter fw = new FileWriter(fileName);
-         BufferedWriter bw = new BufferedWriter(fw);) {
-      bw.write("<!DOCTYPE html>\n" +
+    try ( OutputStreamWriter ow = new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8");) {
+      ow.write("<!DOCTYPE html>\n" +
               "<html>\n" +
               "<head lang=\"en\">\n" +
               "    <meta charset=\"UTF-8\">\n" +
@@ -72,8 +77,8 @@ public abstract class Crawl<E> {
               "</head>\n" +
               "<body align=\"center\">\n" +
               "    <table  border=\"1\" align=\"center\" >");
-      toHtml(total, bw);
-      bw.write("    </table>" +
+      toHtml(total, ow);
+      ow.write("    </table>" +
               "  </body>\n" +
               "</html>");
     }catch (Exception e) {
