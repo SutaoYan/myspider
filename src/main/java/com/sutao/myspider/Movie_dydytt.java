@@ -149,12 +149,12 @@ public class Movie_dydytt extends Crawl<Movie_dydytt.Item> {
   }
 
   @Override
-  public void toHtml(ArrayList<Item> total, OutputStreamWriter bw) throws IOException {
+  public void toHtml(ArrayList<Item> total, StringBuilder bw) {
       for(Item item: total) {
-        bw.write("      <tr>\n");
-        bw.write("        <td><a href="+item.getDownload()+">"+item.getText()+"</a></td>\n");
-        bw.write("        <td>"+item.getMark()+"</td>\n");
-        bw.write("      </tr>\n");
+        bw.append("      <tr>\n");
+        bw.append("        <td><a href="+item.getDownload()+">"+item.getText()+"</a></td>\n");
+        bw.append("        <td>"+item.getMark()+"</td>\n");
+        bw.append("      </tr>\n");
       }
   }
 }

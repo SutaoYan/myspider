@@ -1,6 +1,7 @@
 package com.sutao.myspider;
 
-import java.io.*;
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -11,11 +12,13 @@ import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Component
 public abstract class Crawl<E> {
   protected int maxPage = 50;
   private Comparator<E> comparator;
+  ArrayList<E> total = new ArrayList<>();
 
-  public int threadCount = 10;
+  protected int threadCount = 10;
 
   public int getThreadCount() {
     return threadCount;
@@ -34,7 +37,7 @@ public abstract class Crawl<E> {
   }
 
   public abstract ArrayList<E> run (int page);
-  public abstract void toHtml(ArrayList<E> total, OutputStreamWriter ow ) throws IOException;
+  public abstract void toHtml(ArrayList<E> total, StringBuilder builder );
 
   public Crawl(Comparator<E> comparator, int maxPage) {
     this.comparator = comparator;
@@ -45,8 +48,12 @@ public abstract class Crawl<E> {
     this.comparator = comparator;
   }
 
-  public void crawl(String fileName) {
-    ArrayList<E> total = new ArrayList<>();
+  public Crawl () {
+
+  }
+
+  public String crawl() {
+    total.clear();
     ExecutorService es = Executors.newWorkStealingPool(threadCount);
     List<Future<ArrayList<E>>> results = Stream.iterate(1, page -> page+1).limit(maxPage).map(page ->es.submit(()->run(page))).collect(Collectors.toList());
     results.forEach(item -> {
@@ -60,16 +67,17 @@ public abstract class Crawl<E> {
     });
 
     total.sort(comparator);
-    toHtmlAbstract(total, fileName);
+    return toHtmlAbstract(total);
   }
 
-  public void toHtmlAbstract(ArrayList<E> total, String fileName) {
-    File f = new File(fileName);
-    if (f.exists()) {
-      f.delete();
-    }
-    try ( OutputStreamWriter ow = new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8");) {
-      ow.write("<!DOCTYPE html>\n" +
+  public ArrayList<E> getTotal() {
+    return total;
+  }
+
+  public String toHtmlAbstract(ArrayList<E> total ) {
+    StringBuilder buffer = new StringBuilder();
+
+    buffer.append("<!DOCTYPE html>\n" +
               "<html>\n" +
               "<head lang=\"en\">\n" +
               "    <meta charset=\"UTF-8\">\n" +
@@ -77,12 +85,11 @@ public abstract class Crawl<E> {
               "</head>\n" +
               "<body align=\"center\">\n" +
               "    <table  border=\"1\" align=\"center\" >");
-      toHtml(total, ow);
-      ow.write("    </table>" +
+      toHtml(total, buffer);
+      buffer.append("    </table>" +
               "  </body>\n" +
               "</html>");
-    }catch (Exception e) {
-      e.printStackTrace();
-    }
+
+      return buffer.toString();
   }
 }
