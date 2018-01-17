@@ -230,8 +230,8 @@ public class Jobs extends Crawl<Jobs.Item>{
   private ArrayList<Item> getJobList(int page) {
     ArrayList<Item> list = new ArrayList<>();
     try {
-      search = search.replaceAll("_keyword_", this.keyword);
-      String url = search.replaceAll("_pageNum_", ""+page);
+      String tmpUrl = search.replaceAll("_keyword_", this.keyword);
+      String url = tmpUrl.replaceAll("_pageNum_", ""+page);
       Document doc = Jsoup.connect(url).get();
       Elements jobList = doc.select("div#resultList").first().select("div.el");
       for(Element e : jobList) {

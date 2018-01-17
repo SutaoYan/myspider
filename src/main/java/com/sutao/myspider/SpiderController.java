@@ -36,8 +36,7 @@ public class SpiderController {
 //    jobEntity.setPosition("engineer");
 //    jobEntity.setSalary("5W");
 //    jobRepository.save(jobEntity);
-    jobRepository.findOneByCompany("HP");
-    crawlBuilder.setMaxPage(300);
+    crawlBuilder.setMaxPage(100);
     crawlBuilder.setThreadCount(50);
     crawlBuilder.setKeyword(keyword);
     return crawlBuilder.crawlJob();
