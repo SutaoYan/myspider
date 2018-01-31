@@ -1,13 +1,11 @@
-package com.sutao.myspider;
+package com.sutao.myspider.repo;
 
+import com.sutao.myspider.entities.JobEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Component
 public interface JobRepository extends MongoRepository<JobEntity, String> {
-  JobEntity findOneByCompany(String s);
   JobEntity findOneByHref(String s);
 }
 

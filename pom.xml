@@ -55,7 +55,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.sutao.myspider.CrawlBuilder</mainClass>
+                            <mainClass>com.sutao.myspider.crawl.JobCrawlBuilder</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -73,7 +73,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.sutao.myspider.CrawlBuilder</mainClass>
+                            <mainClass>com.sutao.myspider.crawl.JobCrawlBuilder</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

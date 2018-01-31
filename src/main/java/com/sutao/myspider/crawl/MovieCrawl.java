@@ -1,4 +1,4 @@
-package com.sutao.myspider;
+package com.sutao.myspider.crawl;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,11 +9,11 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class Movie_dydytt extends Crawl<Movie_dydytt.Item> {
+public class MovieCrawl extends AbstractCrawl<MovieCrawl.Item> {
   private String seperator = "/";
   private String url = "http://s.dydytt.net";
   private String search = url + seperator + "plus/search.php?kwtype=0&searchtype=title&keyword=%%%%&PageNo=";
-  private static Comparator<Movie_dydytt.Item> comparator = (Movie_dydytt.Item o1, Movie_dydytt.Item o2) ->  Float.valueOf(o2.getMark()).compareTo(Float.valueOf(o1.getMark()));
+  private static Comparator<MovieCrawl.Item> comparator = (MovieCrawl.Item o1, MovieCrawl.Item o2) ->  Float.valueOf(o2.getMark()).compareTo(Float.valueOf(o1.getMark()));
   protected class Item {
     public String text;
     public String link;
@@ -63,8 +63,8 @@ public class Movie_dydytt extends Crawl<Movie_dydytt.Item> {
     }
   }
 
-  public Movie_dydytt() {
-    super(comparator);
+  public MovieCrawl() {
+    setComparator(comparator);
   }
 
   public ArrayList<Item> getMovieList(int page)
@@ -149,13 +149,18 @@ public class Movie_dydytt extends Crawl<Movie_dydytt.Item> {
   }
 
   @Override
-  public void toHtml(ArrayList<Item> total, StringBuilder bw) {
+  public void toHtmlImpl(ArrayList<Item> total, StringBuilder bw) {
       for(Item item: total) {
         bw.append("      <tr>\n");
         bw.append("        <td><a href="+item.getDownload()+">"+item.getText()+"</a></td>\n");
         bw.append("        <td>"+item.getMark()+"</td>\n");
         bw.append("      </tr>\n");
       }
+  }
+
+  @Override
+  public void save2DB() {
+
   }
 }
 

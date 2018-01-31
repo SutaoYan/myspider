@@ -1,4 +1,4 @@
-package com.sutao.myspider;
+package com.sutao.myspider.entities;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Component;
